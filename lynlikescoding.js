@@ -59,41 +59,45 @@ $(document).ready(function() {
   var playerPoints = [];
   var usedCards = [];
 
+  function randomCardGenerator(handSelector) {
+
+    var length = deck.length;
+    var randomNum52 = Math.floor(Math.random() * length);
+    var randomCard1 = deck[randomNum52];
+    var cardValue1 = randomCard1.point;
+    var cardSuit1 = randomCard1.suit;
+
+    usedCards.push(randomCard1);
+    deck.splice(randomNum52, 1)
+
+    if (cardValue1 === 11) {
+      cardValue1 = 'jack';
+    } else if (cardValue1 === 12) {
+      cardValue1 = 'queen'
+    } else if (cardValue1 === 13) {
+      cardValue1 = 'king'
+    } else if (cardValue1 === 1) {
+      cardValue1 = 'ace';
+    }
+    var hand = "";
+    if (handSelector === "player") {
+      hand = playerPoints;
+    } else {
+      hand = dealerPoints;
+    }
+    hand.push(randomCard1);
+
+    $("#" + handSelector + "-hand").append('<img class="card" src="images/' + cardValue1 + '_of_' + cardSuit1 + '.png" alt="" />');
+    $('#' + handSelector + '-points').text(calculatePoints(hand));
+  }
+
   $("#deal-button").click(function() {
 
-    for (var i = 0; i < 4; i++) {
-      var length = deck.length;
-      var randomNum52 = Math.floor(Math.random() * length);
-      var randomCard1 = deck[randomNum52];
-      var cardValue1 = randomCard1.point;
-      var cardSuit1 = randomCard1.suit;
+    randomCardGenerator('player');
+    randomCardGenerator('dealer');
+    randomCardGenerator('player');
+    randomCardGenerator('dealer');
 
-      usedCards.push(randomCard1);
-      deck.splice(randomNum52, 1)
-
-      if (cardValue1 === 11) {
-        cardValue1 = 'jack';
-      } else if (cardValue1 === 12) {
-        cardValue1 = 'queen'
-      } else if (cardValue1 === 13) {
-        cardValue1 = 'king'
-      } else if (cardValue1 === 1) {
-        cardValue1 = 'ace';
-      }
-
-      if (i < 2) {
-        playerPoints.push(randomCard1);
-        $("#player-hand").append('<img class="card" src="images/' + cardValue1 + '_of_' + cardSuit1 + '.png" alt="" />');
-      } else {
-        dealerPoints.push(randomCard1);
-        $("#dealer-hand").append('<img class="card" src="images/' + cardValue1 + '_of_' + cardSuit1 + '.png" alt="" />');
-      }
-    }
-    $('#dealer-points').text(calculatePoints(dealerPoints));
-    $('#player-points').text(calculatePoints(playerPoints));
-    console.log(playerPoints);
-    console.log(dealerPoints);
-    console.log(usedCards);
   });
 
   function calculatePoints(cards) {
@@ -108,31 +112,10 @@ $(document).ready(function() {
   return sum2Cards;
 }
 
-
   $("#hit-button").click(function() {
 
-    var length = deck.length;
-    var randomNum52 = Math.floor(Math.random() * length);
-    var randomCard1 = deck[randomNum52];
-    var cardValue1 = randomCard1.point;
-    var cardSuit1 = randomCard1.suit;
+    randomCardGenerator('player');
 
-    usedCards.push(randomCard1);
-
-    deck.splice(randomNum52, 1)
-
-    if (cardValue1 === 11) {
-      cardValue1 = 'jack';
-    } else if (cardValue1 === 12) {
-      cardValue1 = 'queen'
-    } else if (cardValue1 === 13) {
-      cardValue1 = 'king'
-    } else if (cardValue1 === 1) {
-      cardValue1 = 'ace';
-    }
-    $("#player-hand").append('<img class="card" src="images/' + cardValue1 + '_of_' + cardSuit1 + '.png" alt="" />');
-
-    playerPoints.push(randomCard1);
     var currPlayerPoints = calculatePoints(playerPoints);
     $('#player-points').text(currPlayerPoints);
     if (currPlayerPoints > 21) {
@@ -144,31 +127,12 @@ $(document).ready(function() {
     var currDealerPoints = calculatePoints(dealerPoints);
     var currPlayerPoints = calculatePoints(playerPoints);
     while (currDealerPoints < 17) {
-      var length = deck.length;
-      var randomNum52 = Math.floor(Math.random() * length);
-      var randomCard1 = deck[randomNum52];
-      var cardValue1 = randomCard1.point;
-      var cardSuit1 = randomCard1.suit;
-      deck.splice(randomNum52, 1)
-      if (cardValue1 === 11) {
-        cardValue1 = 'jack';
-      } else if (cardValue1 === 12) {
-        cardValue1 = 'queen'
-      } else if (cardValue1 === 13) {
-        cardValue1 = 'king'
-      } else if (cardValue1 === 1) {
-        cardValue1 = 'ace';
-      }
-      $("#dealer-hand").append('<img class="card" src="images/' + cardValue1 + '_of_' + cardSuit1 + '.png" alt="" />');
 
-      dealerPoints.push(randomCard1);
-      currDealerPoints += randomCard1.point;
+      randomCardGenerator('dealer');
+
+      currDealerPoints += dealerPoints[dealerPoints.length - 1].point;
       $('#dealer-points').text(currDealerPoints);
-      console.log(currDealerPoints);
-      console.log(currPlayerPoints);
       if ((currDealerPoints > currPlayerPoints) && (currDealerPoints <= 21)) {
-        // console.log(currDealerPoints);
-        // console.log(currPlayerPoints);
         $('#messages').text("Dealer Wins!");
       } else if ((currPlayerPoints > currDealerPoints) && (currPlayerPoints <= 21)) {
         $('#messages').text("You Win!");
