@@ -57,6 +57,7 @@ $(document).ready(function() {
 
   var dealerPoints = [];
   var playerPoints = [];
+  var usedCards = [];
 
   $("#deal-button").click(function() {
 
@@ -66,7 +67,10 @@ $(document).ready(function() {
       var randomCard1 = deck[randomNum52];
       var cardValue1 = randomCard1.point;
       var cardSuit1 = randomCard1.suit;
+
+      usedCards.push(randomCard1);
       deck.splice(randomNum52, 1)
+
       if (cardValue1 === 11) {
         cardValue1 = 'jack';
       } else if (cardValue1 === 12) {
@@ -89,6 +93,7 @@ $(document).ready(function() {
     $('#player-points').text(calculatePoints(playerPoints));
     console.log(playerPoints);
     console.log(dealerPoints);
+    console.log(usedCards);
   });
 
   function calculatePoints(cards) {
@@ -111,7 +116,11 @@ $(document).ready(function() {
     var randomCard1 = deck[randomNum52];
     var cardValue1 = randomCard1.point;
     var cardSuit1 = randomCard1.suit;
+
+    usedCards.push(randomCard1);
+
     deck.splice(randomNum52, 1)
+
     if (cardValue1 === 11) {
       cardValue1 = 'jack';
     } else if (cardValue1 === 12) {
@@ -177,6 +186,23 @@ $(document).ready(function() {
     if(currDealerPoints === currPlayerPoints) {
     $('#messages').text("Push!");
     }
+  });
+
+  $("#reset-button").click(function() {
+    $("#player-hand").empty();
+    $("#dealer-hand").empty();
+    $('#player-points').text("");
+    $('#dealer-points').text("");
+    $('#messages').text("");
+
+    dealerPoints = [];
+    playerPoints = [];
+
+    usedCards.forEach(function(card) {
+      deck.push(card);
+    });
+    usedCards = [];
+
   });
 
 });

@@ -56,6 +56,7 @@ var deck = [
 $(document).ready(function() {
   // set counter to 0 => how many times the deal button has been clicked on
   var counter = 0;
+  var usedCards = [];
 
   $("#deal-button").click(function() {
   var loopRuns;
@@ -73,7 +74,7 @@ $(document).ready(function() {
     var randomCard1 = deck[randomNum52];
     var cardValue1 = randomCard1.point;
     var cardSuit1 = randomCard1.suit;
-    deck.splice(randomNum52, 1)
+    console.log("USED CARD: " + deck.splice(randomNum52, 1));
     if (cardValue1 === 11) {
       cardValue1 = 'jack';
     } else if (cardValue1 === 12) {
