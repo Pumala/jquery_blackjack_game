@@ -9,7 +9,7 @@ body {
   height: 500px;
   width: 100%;
   background-color: brown;
-  border-radius: 10px;
+  border-radius: 30%;
   border: 3px solid #222;
   margin: 50px auto;
 }
@@ -18,10 +18,15 @@ body {
   width: 600px;
   height: 60px;
   margin: 20px auto;
+  text-align: center;
+  color: #fff;
+  font-size: 3.5em;
+}
+label {
+  color: #fff;
 }
 .user {
   padding-left: 50px;
-  color: #fff;
 }
 #dealer-hand, #player-hand {
   width: 90%;
